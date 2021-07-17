@@ -28,10 +28,10 @@ Run The App
     <td>Constructor Page</td>
   </tr>
   <tr>
-    <td valign="top"><img src="ScreenShots/Screenshot_1626239718.png" width=270 height=480></td>
-    <td valign="top"><img src="ScreenShots/Screenshot_1626239598.png" width=270 height=480></td>
-    <td valign="top"><img src="ScreenShots/Screenshot_1626239603.png" width=270 height=480></td>
-    <td valign="top"><img src="ScreenShots/Screenshot_1626239605.png" width=270 height=480></td>
+    <td valign="top"><img src="ScreenShots/Screenshot_1626239718.png" width=270 height=360></td>
+    <td valign="top"><img src="ScreenShots/Screenshot_1626239598.png" width=270 height=360></td>
+    <td valign="top"><img src="ScreenShots/Screenshot_1626239603.png" width=270 height=360></td>
+    <td valign="top"><img src="ScreenShots/Screenshot_1626239605.png" width=270 height=360></td>
   </tr>
  </table>
  
