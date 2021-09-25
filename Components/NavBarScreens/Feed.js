@@ -16,6 +16,8 @@ import {
   CollapseBody,
 } from 'accordion-collapse-react-native';
 
+import Timeline from 'react-native-timeline-flatlist';
+
 import axios from 'axios';
 
 const Feed = () => {
@@ -27,6 +29,7 @@ const Feed = () => {
   const [info, setInfo] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [upcoming, setUpcoming] = useState(' ');
+  // const [data, setData] = useState([]);
 
   async function getSchedule() {
     try {
@@ -48,6 +51,7 @@ const Feed = () => {
   const nextDays = arrayDates;
 
   let newDaysObject = {};
+  let newListObject = {};
 
   nextDays.forEach(day => {
     newDaysObject[day] = {
@@ -57,19 +61,19 @@ const Feed = () => {
   if (isLoading === false) {
     // console.log(info.filter(e => e.date > '2021-07-11').map(e => e.date));
     let today = new Date();
-    console.log(today.toISOString().split('T')[0]);
-    console.log(today.getTime());
+    // console.log(today.toISOString().split('T')[0]);
+    // console.log(today.getTime());
     var todayDate = today.toISOString().split('T')[0];
     var timerDate = info.filter(e => e.date >= todayDate).map(e => e.date);
     var timerTime = info.filter(e => e.date >= todayDate).map(e => e.time);
     var timerName = info.filter(e => e.date >= todayDate).map(e => e.raceName);
     var timerTimeSecs = timerTime[0].substr(0, 2) * 60 * 60;
-    console.log(timerTimeSecs);
-    console.log(timerTime[0].substr(0, 2));
-    console.log(timerDate[0]);
-    console.log(timerName[0]);
+    // console.log(timerTimeSecs);
+    // console.log(timerTime[0].substr(0, 2));
+    // console.log(timerDate[0]);
+    // console.log(timerName[0]);
     const date = new Date(timerDate[0]).getTime();
-    console.log(date);
+    // console.log(date);
     // console.log(date - today.getTime());
     var finalTime = date - today.getTime();
     var finalName = timerName[0];
@@ -77,79 +81,112 @@ const Feed = () => {
     // timerDate.map(e => {
     //   console.log(e.toString());
     // });
+
+    const data = info.map(e => e.raceName);
+    // console.log(data.length);
+
+    var map = new Map();
+
+    let keys = info.forEach(e => 'title');
+    console.log(keys);
+    const newArr = [];
+
+    // const data = newArr.map(e => Object.assign({e, title: e.raceName}));
+    // console.log(data);
+
+    // for (var i = 0; i < data.length; i++) {
+    //   // mp = Map
+    //   // keys = key array
+    //   // values = value array
+    //   map.set(keys[i], data[i]);
+    // }
+    // console.log(map);
   } else {
     console.log('loading');
   }
 
-  const UpComing = () =>
-    info
-      .filter(e => e.date >= todayDate)
-      .map(e => {
-        return (
-          <View key={e.round}>
-            <Collapse>
-              <CollapseHeader>
-                <View
-                  style={{
-                    height: 50,
-                    width: '100%',
-                    backgroundColor: '#E50914',
-                    padding: 5,
-                    margin: 5,
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    alignSelf: 'center',
-                    justifyContent: 'space-between',
-                    borderRadius: 5,
-                  }}>
-                  <Text
-                    style={{
-                      color: '#fff',
-                      fontSize: 20,
-                    }}>{`${e.raceName}`}</Text>
+  const UpComing = () => {
+    return (
+      <View style={{flex: 1}}>
+        <Timeline
+          data={info}
+          dotColor="#000"
+          circleColor="#E50914"
+          lineColor="#E50914"
+          showTime={false}
+        />
+      </View>
+    );
+  };
 
-                  <Text
-                    style={{
-                      color: '#fff',
-                      fontSize: 15,
-                    }}>
-                    {new Date(e.date).toLocaleString('en-us').substr(4, 7)}
-                  </Text>
-                </View>
-              </CollapseHeader>
-              <CollapseBody>
-                <View
-                  style={{
-                    height: 100,
-                    width: '100%',
-                    backgroundColor: '#E50914',
-                    borderRadius: 5,
-                    padding: 10,
-                    flexDirection: 'row',
-                  }}>
-                  <Image
-                    source={require('../../assets/1200px-Flag_of_the_United_Kingdom.svg.png')}
-                    style={{height: 15, width: 20, borderRadius: 2}}
-                  />
-                  <Text
-                    style={{
-                      marginHorizontal: 5,
-                      color: '#fff',
-                    }}>{`${e.Circuit.Location.locality}`}</Text>
-                  <Text
-                    style={{
-                      marginHorizontal: 5,
-                    }}>
-                    {e.time.substr(0, 2)}
-                  </Text>
-                </View>
-              </CollapseBody>
-            </Collapse>
-          </View>
-        );
-      });
+  // info
+  //   .filter(e => e.date >= todayDate)
+  //   .map(e => {
+  //     return (
+  //       <View key={e.round}>
+  //         <Collapse>
+  //           <CollapseHeader>
+  //             <View
+  //               style={{
+  //                 height: 50,
+  //                 width: '100%',
+  //                 backgroundColor: '#E50914',
+  //                 padding: 5,
+  //                 margin: 5,
+  //                 alignItems: 'center',
+  //                 flexDirection: 'row',
+  //                 alignSelf: 'center',
+  //                 justifyContent: 'space-between',
+  //                 borderRadius: 5,
+  //               }}>
+  //               <Text
+  //                 style={{
+  //                   color: '#fff',
+  //                   fontSize: 20,
+  //                 }}>{`${e.raceName}`}</Text>
 
-  console.log(finalTime / 1000);
+  //               <Text
+  //                 style={{
+  //                   color: '#fff',
+  //                   fontSize: 15,
+  //                 }}>
+  //                 {new Date(e.date).toLocaleString('en-us').substr(4, 7)}
+  //               </Text>
+  //             </View>
+  //           </CollapseHeader>
+  //           <CollapseBody>
+  //             <View
+  //               style={{
+  //                 height: 100,
+  //                 width: '100%',
+  //                 backgroundColor: '#E50914',
+  //                 borderRadius: 5,
+  //                 padding: 10,
+  //                 flexDirection: 'row',
+  //               }}>
+  //               <Image
+  //                 source={require('../../assets/1200px-Flag_of_the_United_Kingdom.svg.png')}
+  //                 style={{height: 15, width: 20, borderRadius: 2}}
+  //               />
+  //               <Text
+  //                 style={{
+  //                   marginHorizontal: 5,
+  //                   color: '#fff',
+  //                 }}>{`${e.Circuit.Location.locality}`}</Text>
+  //               <Text
+  //                 style={{
+  //                   marginHorizontal: 5,
+  //                 }}>
+  //                 {e.time.substr(0, 2)}
+  //               </Text>
+  //             </View>
+  //           </CollapseBody>
+  //         </Collapse>
+  //       </View>
+  //     );
+  //   });
+
+  // console.log(finalTime / 1000);
   const Timer = () => {
     return (
       <View
