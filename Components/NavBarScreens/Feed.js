@@ -1,13 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ActivityIndicator,
-  ScrollView,
-  FlatList,
-  Image,
-} from 'react-native';
+import {StyleSheet, Text, View, ActivityIndicator} from 'react-native';
 import CalendarPiece from '../Pieces/CalendarPiece';
 import CountDown from 'react-native-countdown-component';
 import {
@@ -15,9 +7,8 @@ import {
   CollapseHeader,
   CollapseBody,
 } from 'accordion-collapse-react-native';
-
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Timeline from 'react-native-timeline-flatlist';
-
 import axios from 'axios';
 
 const Feed = () => {
@@ -28,17 +19,14 @@ const Feed = () => {
   const [date, setDate] = useState(' ');
   const [info, setInfo] = useState([]);
   const [isLoading, setLoading] = useState(true);
-  const [upcoming, setUpcoming] = useState(' ');
-  // const [data, setData] = useState([]);
 
   async function getSchedule() {
     try {
       await axios
         .get('http://ergast.com/api/f1/current.json')
         .then(response => {
-          setDate(response.data.MRData.RaceTable.Races.map(x => x.date)),
-            setInfo(response.data.MRData.RaceTable.Races);
-          // console.log(info);
+          setInfo(response.data.MRData.RaceTable.Races);
+          setDate(response.data.MRData.RaceTable.Races.map(x => x.date));
         })
         .finally(() => setLoading(false));
     } catch (error) {
@@ -46,147 +34,61 @@ const Feed = () => {
     }
   }
 
-  const arrayDates = Object.values(date);
+  let today = new Date();
+  var todayDate = today.toISOString().split('T')[0];
 
-  const nextDays = arrayDates;
-
-  let newDaysObject = {};
-  let newListObject = {};
-
-  nextDays.forEach(day => {
-    newDaysObject[day] = {
-      marked: true,
-    };
-  });
   if (isLoading === false) {
-    // console.log(info.filter(e => e.date > '2021-07-11').map(e => e.date));
-    let today = new Date();
-    // console.log(today.toISOString().split('T')[0]);
-    // console.log(today.getTime());
-    var todayDate = today.toISOString().split('T')[0];
-    var timerDate = info.filter(e => e.date >= todayDate).map(e => e.date);
-    var timerTime = info.filter(e => e.date >= todayDate).map(e => e.time);
-    var timerName = info.filter(e => e.date >= todayDate).map(e => e.raceName);
-    var timerTimeSecs = timerTime[0].substr(0, 2) * 60 * 60;
-    // console.log(timerTimeSecs);
-    // console.log(timerTime[0].substr(0, 2));
-    // console.log(timerDate[0]);
-    // console.log(timerName[0]);
-    const date = new Date(timerDate[0]).getTime();
-    // console.log(date);
-    // console.log(date - today.getTime());
-    var finalTime = date - today.getTime();
-    var finalName = timerName[0];
+    var filteredInfo = info.filter(e => e.date > todayDate);
+    const {date, time, raceName} = filteredInfo[0];
 
-    // timerDate.map(e => {
-    //   console.log(e.toString());
-    // });
+    var finalTime = new Date(date).getTime() - today.getTime();
+    var finalName = raceName;
+    var timerTimeSecs = time.substr(0, 2) * 60 * 60 + 7200;
 
-    const data = info.map(e => e.raceName);
-    // console.log(data.length);
+    var index = info.findIndex(e => e.raceName === raceName);
 
-    var map = new Map();
+    let flag = null;
+    switch (raceName) {
+      case 'Turkish Grand Prix': {
+        flag = 'hello';
+      }
+    }
+    console.log(flag);
 
-    let keys = info.forEach(e => 'title');
-    console.log(keys);
-    const newArr = [];
+    const data = info
+      .filter(e => e.date > todayDate)
+      .map(e => ({
+        title: e.raceName,
+        time: e.date,
+        description: `${e.Circuit.circuitName}   ${'>'}`,
+        lineColor: '#000',
+        id: e.Circuit.circuitId,
+      }));
 
-    // const data = newArr.map(e => Object.assign({e, title: e.raceName}));
-    // console.log(data);
+    const data1 = info
+      .filter(e => e.date <= todayDate)
+      .map(e => ({
+        title: e.raceName,
+        time: e.date,
+        description: e.Circuit.circuitName,
+        lineColor: '#405De6',
+        id: e.Circuit.circuitId,
+      }));
 
-    // for (var i = 0; i < data.length; i++) {
-    //   // mp = Map
-    //   // keys = key array
-    //   // values = value array
-    //   map.set(keys[i], data[i]);
-    // }
-    // console.log(map);
+    var data2 = data1.concat(data);
+
+    const arrayDates = Object.values(date);
+    const CalendarDays = arrayDates;
+    var CalendarDaysObject = {};
+    CalendarDays.forEach(day => {
+      CalendarDaysObject[day] = {
+        marked: true,
+      };
+    });
   } else {
     console.log('loading');
   }
 
-  const UpComing = () => {
-    return (
-      <View style={{flex: 1}}>
-        <Timeline
-          data={info}
-          dotColor="#000"
-          circleColor="#E50914"
-          lineColor="#E50914"
-          showTime={false}
-        />
-      </View>
-    );
-  };
-
-  // info
-  //   .filter(e => e.date >= todayDate)
-  //   .map(e => {
-  //     return (
-  //       <View key={e.round}>
-  //         <Collapse>
-  //           <CollapseHeader>
-  //             <View
-  //               style={{
-  //                 height: 50,
-  //                 width: '100%',
-  //                 backgroundColor: '#E50914',
-  //                 padding: 5,
-  //                 margin: 5,
-  //                 alignItems: 'center',
-  //                 flexDirection: 'row',
-  //                 alignSelf: 'center',
-  //                 justifyContent: 'space-between',
-  //                 borderRadius: 5,
-  //               }}>
-  //               <Text
-  //                 style={{
-  //                   color: '#fff',
-  //                   fontSize: 20,
-  //                 }}>{`${e.raceName}`}</Text>
-
-  //               <Text
-  //                 style={{
-  //                   color: '#fff',
-  //                   fontSize: 15,
-  //                 }}>
-  //                 {new Date(e.date).toLocaleString('en-us').substr(4, 7)}
-  //               </Text>
-  //             </View>
-  //           </CollapseHeader>
-  //           <CollapseBody>
-  //             <View
-  //               style={{
-  //                 height: 100,
-  //                 width: '100%',
-  //                 backgroundColor: '#E50914',
-  //                 borderRadius: 5,
-  //                 padding: 10,
-  //                 flexDirection: 'row',
-  //               }}>
-  //               <Image
-  //                 source={require('../../assets/1200px-Flag_of_the_United_Kingdom.svg.png')}
-  //                 style={{height: 15, width: 20, borderRadius: 2}}
-  //               />
-  //               <Text
-  //                 style={{
-  //                   marginHorizontal: 5,
-  //                   color: '#fff',
-  //                 }}>{`${e.Circuit.Location.locality}`}</Text>
-  //               <Text
-  //                 style={{
-  //                   marginHorizontal: 5,
-  //                 }}>
-  //                 {e.time.substr(0, 2)}
-  //               </Text>
-  //             </View>
-  //           </CollapseBody>
-  //         </Collapse>
-  //       </View>
-  //     );
-  //   });
-
-  // console.log(finalTime / 1000);
   const Timer = () => {
     return (
       <View
@@ -215,7 +117,7 @@ const Feed = () => {
           digitStyle={{
             width: 70,
           }}
-          onFinish={() => alert('finished')}
+          onFinish={() => console.log('finished')}
           onPress={() => alert('Next Race is:' + `${finalName}`)}
           size={20}
           timeLabels={{d: 'Days', h: 'Hours', m: 'Minutes', s: 'Seconds'}}
@@ -234,6 +136,126 @@ const Feed = () => {
     );
   };
 
+  const ListHeader = () => {
+    return (
+      <View
+        style={{
+          backgroundColor: '#000',
+          padding: 10,
+        }}>
+        <Text style={{color: '#fff', fontSize: 40, fontWeight: '700'}}>
+          Home
+          <Text
+            style={{
+              fontSize: 35,
+              textAlign: 'center',
+              textAlignVertical: 'center',
+            }}>
+            🖖
+          </Text>
+        </Text>
+        <View
+          style={{
+            height: 0.5,
+            width: '100%',
+            backgroundColor: '#696969',
+            alignItems: 'center',
+            borderRadius: 5,
+          }}
+        />
+        <Timer />
+
+        <Collapse>
+          <CollapseHeader>
+            <View
+              style={{
+                height: 45,
+                width: '100%',
+                backgroundColor: '#000',
+
+                borderRadius: 5,
+                alignItems: 'center',
+                justifyContent: 'center',
+                elevation: 5,
+                flexDirection: 'row',
+                borderBottomWidth: 0.5,
+                borderBottomColor: '#696969',
+                marginTop: 5,
+              }}>
+              <Text
+                style={{
+                  color: '#E50914',
+                  fontSize: 20,
+                  fontWeight: '700',
+                  textAlign: 'center',
+                }}>
+                Calendar
+              </Text>
+              <MaterialCommunityIcons
+                name="calendar"
+                color="#E50914"
+                size={20}
+                style={{alignSelf: 'center'}}
+              />
+            </View>
+          </CollapseHeader>
+          <CollapseBody>
+            <CalendarPiece RaceDate={CalendarDaysObject} />
+          </CollapseBody>
+        </Collapse>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: '700',
+            color: '#fff',
+            marginVertical: 10,
+          }}>
+          Upcoming Races
+        </Text>
+      </View>
+    );
+  };
+
+  const UpComing = () => {
+    return (
+      <Timeline
+        data={data2}
+        circleColor="#405DE6"
+        lineColor="#405DE6"
+        showTime={true}
+        titleStyle={{color: '#fff'}}
+        timeStyle={{color: '#fff', fontWeight: '700'}}
+        listViewContainerStyle={{
+          marginHorizontal: 10,
+          marginVertical: 5,
+        }}
+        descriptionStyle={{color: '#fff', fontWeight: '700'}}
+        detailContainerStyle={{
+          backgroundColor: '#405DE6',
+          width: '90%',
+          marginVertical: 10,
+          borderRadius: 8,
+          paddingHorizontal: 10,
+          paddingVertical: 5,
+          marginVertical: 10,
+        }}
+        timeContainerStyle={{
+          padding: 5,
+          borderRadius: 5,
+          backgroundColor: '#405DE6',
+        }}
+        onEventPress={e => {
+          console.log(e.id);
+        }}
+        options={{
+          ListHeaderComponent: <ListHeader />,
+          showsVerticalScrollIndicator: false,
+          initialScrollIndex: index,
+        }}
+      />
+    );
+  };
+
   return isLoading ? (
     <View
       style={{
@@ -242,91 +264,12 @@ const Feed = () => {
         backgroundColor: '#000',
         height: '100%',
       }}>
-      <Text style={{color: '#fff'}}>Loading....</Text>
+      <ActivityIndicator color="#E50914" animating={true} size={'large'} />
     </View>
   ) : (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      style={{
-        height: '100%',
-        width: '100%',
-        backgroundColor: '#000',
-        padding: 10,
-      }}>
-      <Text style={{color: '#fff', fontSize: 40, fontWeight: '700'}}>
-        Home
-        <Text
-          style={{
-            fontSize: 35,
-            textAlign: 'center',
-            textAlignVertical: 'center',
-          }}>
-          🖖
-        </Text>
-      </Text>
-      <View
-        style={{
-          height: 0.5,
-          width: '100%',
-          backgroundColor: '#696969',
-          alignItems: 'center',
-          borderRadius: 5,
-        }}
-      />
-      <Timer />
-
-      <Collapse>
-        <CollapseHeader>
-          <View
-            style={{
-              height: 45,
-              width: '100%',
-              backgroundColor: '#000',
-
-              borderRadius: 5,
-              alignItems: 'center',
-              justifyContent: 'center',
-              elevation: 5,
-              flexDirection: 'row',
-              borderBottomWidth: 0.5,
-              borderBottomColor: '#696969',
-              marginTop: 5,
-            }}>
-            <Text
-              style={{
-                color: '#E50914',
-                fontSize: 20,
-                fontWeight: '700',
-                textAlign: 'center',
-              }}>
-              Calendar
-            </Text>
-            <Image
-              source={require('../../assets/down-circle.png')}
-              style={{
-                height: 20,
-                width: 20,
-                alignSelf: 'center',
-                marginHorizontal: 10,
-              }}
-            />
-          </View>
-        </CollapseHeader>
-        <CollapseBody>
-          <CalendarPiece RaceDate={newDaysObject} />
-        </CollapseBody>
-      </Collapse>
-      <Text
-        style={{
-          fontSize: 20,
-          fontWeight: '700',
-          color: '#E50914',
-          margin: 10,
-        }}>
-        Upcoming Races
-      </Text>
+    <View style={{flex: 1, backgroundColor: '#000'}}>
       <UpComing />
-    </ScrollView>
+    </View>
   );
 };
 

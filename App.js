@@ -20,6 +20,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Feed from './Components/NavBarScreens/Feed';
 import StandingsScreen from './Components/NavBarScreens/StandingsScreen';
@@ -47,7 +48,7 @@ const App = () => {
             tabBarLabel: 'Home',
 
             tabBarIcon: ({color}) => (
-              <Ionicons name="ios-home" color={color} size={30} />
+              <MaterialCommunityIcons name="home" color={color} size={35} />
             ),
           }}
         />
