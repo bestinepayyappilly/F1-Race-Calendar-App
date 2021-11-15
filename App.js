@@ -24,6 +24,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import Feed from './Components/NavBarScreens/Feed';
 import StandingsScreen from './Components/NavBarScreens/StandingsScreen';
+import InfoScreen from './Components/InfoScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -34,21 +35,19 @@ const App = () => {
       <Tab.Navigator
         initialRouteName="Drivers"
         tabBarOptions={{
-          showLabel: false,
           inactiveTintColor: '#fff',
           activeTintColor: '#E50914',
           activeBackgroundColor: '#000',
           inactiveBackgroundColor: '#000',
           style: {borderTopWidth: 0, elevation: 0},
+          showLabel: false,
         }}>
         <Tab.Screen
           name="Home"
           component={Feed}
           options={{
-            tabBarLabel: 'Home',
-
             tabBarIcon: ({color}) => (
-              <MaterialCommunityIcons name="home" color={color} size={35} />
+              <Ionicons name="home" color={color} size={25} />
             ),
           }}
         />
@@ -66,10 +65,10 @@ const App = () => {
   };
 
   return (
-    <View style={{height: '100%', width: '100%'}}>
+    <View style={{height: '100%', width: '100%', backgroundColor: '#000'}}>
       <StatusBar backgroundColor="#000" />
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator mode="modal">
           <Stack.Screen
             name="Splash"
             component={SplashScreen}
@@ -79,6 +78,18 @@ const App = () => {
             name="Home"
             component={Home}
             options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="InfoScreen"
+            component={InfoScreen}
+            options={{
+              headerStyle: {backgroundColor: '#000'},
+              headerTitleStyle: {color: '#fff'},
+              headerTintColor: '#fff',
+              headerTitle: 'Information',
+              headerTitleAlign: 'center',
+              
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>

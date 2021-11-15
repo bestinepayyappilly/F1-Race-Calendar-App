@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, Text, View, ActivityIndicator} from 'react-native';
 import CalendarPiece from '../Pieces/CalendarPiece';
 import CountDown from 'react-native-countdown-component';
@@ -11,12 +11,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Timeline from 'react-native-timeline-flatlist';
 import axios from 'axios';
 
-const Feed = () => {
+import NotificationButton from '../Component/NotificationButton';
+
+const Feed = ({navigation}) => {
   useEffect(() => {
     getSchedule();
   }, []);
 
-  const [date, setDate] = useState(' ');
+  const [date, setDate] = useState(null);
   const [info, setInfo] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
@@ -33,49 +35,9 @@ const Feed = () => {
       alert(error);
     }
   }
-
-  let today = new Date();
-  var todayDate = today.toISOString().split('T')[0];
-
   if (isLoading === false) {
-    var filteredInfo = info.filter(e => e.date > todayDate);
-    const {date, time, raceName} = filteredInfo[0];
-
-    var finalTime = new Date(date).getTime() - today.getTime();
-    var finalName = raceName;
-    var timerTimeSecs = time.substr(0, 2) * 60 * 60 + 7200;
-
-    var index = info.findIndex(e => e.raceName === raceName);
-
-    let flag = null;
-    switch (raceName) {
-      case 'Turkish Grand Prix': {
-        flag = 'hello';
-      }
-    }
-    console.log(flag);
-
-    const data = info
-      .filter(e => e.date > todayDate)
-      .map(e => ({
-        title: e.raceName,
-        time: e.date,
-        description: `${e.Circuit.circuitName}   ${'>'}`,
-        lineColor: '#000',
-        id: e.Circuit.circuitId,
-      }));
-
-    const data1 = info
-      .filter(e => e.date <= todayDate)
-      .map(e => ({
-        title: e.raceName,
-        time: e.date,
-        description: e.Circuit.circuitName,
-        lineColor: '#405De6',
-        id: e.Circuit.circuitId,
-      }));
-
-    var data2 = data1.concat(data);
+    var today = new Date();
+    var todayDate = today.toISOString().split('T')[0];
 
     const arrayDates = Object.values(date);
     const CalendarDays = arrayDates;
@@ -85,6 +47,46 @@ const Feed = () => {
         marked: true,
       };
     });
+  }
+
+  if (isLoading === false) {
+    var filteredInfo = info.filter(e => e.date > todayDate);
+    var filteredInfoLess = info.filter(e => e.date <= todayDate);
+    const {date, time, raceName} = filteredInfo[0];
+
+    var finalTime = new Date(date).getTime() - today.getTime();
+    var finalName = raceName;
+
+    var timerTimeSecs = time.substr(0, 2) * 60 * 60;
+
+    var index = info.findIndex(e => e.raceName === raceName);
+
+    const data = filteredInfo.map(e => ({
+      title: e.raceName,
+      time: e.date,
+      description: e.Circuit.circuitName,
+      lineColor: '#000',
+      id: e.Circuit.circuitId,
+      icon: require('../../assets/icons8-double-tick-96-black.png'),
+      ZTime: e.time,
+      round: e.round,
+      season: e.season,
+    }));
+
+    const data1 = filteredInfoLess.map(e => ({
+      title: e.raceName,
+      time: e.date,
+      description: e.Circuit.circuitName,
+      lineColor: '#405De6',
+      id: e.Circuit.circuitId,
+      icon: require('../../assets/icons8-double-tick-96.png'),
+      ZTime: e.time,
+      round: e.round,
+      season: e.season,
+    }));
+
+    var data2 = data1.concat(data);
+    // console.log('this is data2:', data2);
   } else {
     console.log('loading');
   }
@@ -99,7 +101,7 @@ const Feed = () => {
           alignItems: 'center',
           justifyContent: 'center',
           alignSelf: 'center',
-          borderRadius: 5,
+          borderRadius: 10,
           marginTop: 10,
         }}>
         <Text
@@ -143,17 +145,25 @@ const Feed = () => {
           backgroundColor: '#000',
           padding: 10,
         }}>
-        <Text style={{color: '#fff', fontSize: 40, fontWeight: '700'}}>
-          Home
-          <Text
-            style={{
-              fontSize: 35,
-              textAlign: 'center',
-              textAlignVertical: 'center',
-            }}>
-            🖖
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <Text style={{color: '#fff', fontSize: 40, fontWeight: '700'}}>
+            Home
+            <Text
+              style={{
+                fontSize: 35,
+                textAlign: 'center',
+                textAlignVertical: 'center',
+              }}>
+              🖖
+            </Text>
           </Text>
-        </Text>
+          <NotificationButton />
+        </View>
         <View
           style={{
             height: 0.5,
@@ -178,8 +188,7 @@ const Feed = () => {
                 justifyContent: 'center',
                 elevation: 5,
                 flexDirection: 'row',
-                borderBottomWidth: 0.5,
-                borderBottomColor: '#696969',
+
                 marginTop: 5,
               }}>
               <Text
@@ -188,39 +197,60 @@ const Feed = () => {
                   fontSize: 20,
                   fontWeight: '700',
                   textAlign: 'center',
+                  margin: 5,
                 }}>
                 Calendar
               </Text>
               <MaterialCommunityIcons
-                name="calendar"
+                name="calendar-multiple-check"
                 color="#E50914"
                 size={20}
-                style={{alignSelf: 'center'}}
+                style={{alignSelf: 'center', margin: 5}}
               />
             </View>
           </CollapseHeader>
+
           <CollapseBody>
             <CalendarPiece RaceDate={CalendarDaysObject} />
           </CollapseBody>
         </Collapse>
+        <View
+          style={{
+            backgroundColor: '#696969',
+            width: '100%',
+            height: 0.1,
+          }}></View>
         <Text
           style={{
-            fontSize: 20,
+            fontSize: 25,
             fontWeight: '700',
             color: '#fff',
             marginVertical: 10,
           }}>
-          Upcoming Races
+          Races
         </Text>
       </View>
     );
   };
 
   const UpComing = () => {
+    // const flatList = useRef();
+
+    // const scrollToIndex = () => {
+    //   flatList.current.scrollToIndex({animated: true, index: index});
+    // };
+    // useEffect(() => {
+    //   console.log(scrollToIndex());
+    // });
+
     return (
       <Timeline
+        // ref={ref => {
+        //   flatList.current = ref;
+        // }}
         data={data2}
         circleColor="#405DE6"
+        circleSize={20}
         lineColor="#405DE6"
         showTime={true}
         titleStyle={{color: '#fff'}}
@@ -228,30 +258,38 @@ const Feed = () => {
         listViewContainerStyle={{
           marginHorizontal: 10,
           marginVertical: 5,
+          justifyContent: 'center',
         }}
         descriptionStyle={{color: '#fff', fontWeight: '700'}}
         detailContainerStyle={{
           backgroundColor: '#405DE6',
           width: '90%',
-          marginVertical: 10,
+          marginVertical: 15,
           borderRadius: 8,
           paddingHorizontal: 10,
           paddingVertical: 5,
-          marginVertical: 10,
         }}
         timeContainerStyle={{
           padding: 5,
           borderRadius: 5,
           backgroundColor: '#405DE6',
+          marginHorizontal: 5,
         }}
         onEventPress={e => {
-          console.log(e.id);
+          navigation.navigate('InfoScreen', {
+            data: e,
+          });
         }}
+        innerCircle="icon"
+        iconStyle={{height: '70%', width: '70%'}}
         options={{
           ListHeaderComponent: <ListHeader />,
           showsVerticalScrollIndicator: false,
-          initialScrollIndex: index,
+          scrollToIndex: index,
         }}
+        iconDefault={require('../../assets/icons8-double-tick-96-black.png')}
+
+        // eventContainerStyle={{marginVertical: 20}}
       />
     );
   };

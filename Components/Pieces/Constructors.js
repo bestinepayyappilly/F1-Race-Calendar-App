@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View, ScrollView, Switch} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Switch,
+  ActivityIndicator,
+} from 'react-native';
 import axios from 'axios';
 
 const Constructors = () => {
@@ -151,10 +158,10 @@ const Constructors = () => {
       style={{
         alignItems: 'center',
         justifyContent: 'center',
+        flex: 1,
         backgroundColor: '#000',
-        height: '100%',
       }}>
-      <Text style={{color: '#fff', fontSize: 20}}>Loading....</Text>
+      <ActivityIndicator color="red" size="large" />
     </View>
   ) : (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>

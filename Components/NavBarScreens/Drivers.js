@@ -6,6 +6,7 @@ import {
   FlatList,
   ScrollView,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import axios from 'axios';
 
@@ -104,10 +105,10 @@ const Drivers = () => {
       style={{
         alignItems: 'center',
         justifyContent: 'center',
+        flex: 1,
         backgroundColor: '#000',
-        height: '100%',
       }}>
-      <Text style={{color: '#fff', fontSize: 20}}>Loading....</Text>
+      <ActivityIndicator color="red" size="large" />
     </View>
   ) : (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
