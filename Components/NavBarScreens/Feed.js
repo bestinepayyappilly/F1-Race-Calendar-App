@@ -26,7 +26,6 @@ const Feed = () => {
         .get('http://ergast.com/api/f1/current.json')
         .then(response => {
           setInfo(response.data.MRData.RaceTable.Races);
-          setDate(response.data.MRData.RaceTable.Races.map(x => x.date));
         })
         .finally(() => setLoading(false));
     } catch (error) {
@@ -53,7 +52,6 @@ const Feed = () => {
         flag = 'hello';
       }
     }
-    console.log(flag);
 
     const data = info
       .filter(e => e.date > todayDate)
