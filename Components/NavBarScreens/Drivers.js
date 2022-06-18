@@ -6,6 +6,7 @@ import {
   FlatList,
   ScrollView,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import axios from 'axios';
 
@@ -20,7 +21,7 @@ const Drivers = () => {
   async function getList() {
     try {
       await axios
-        .get('http://ergast.com/api/f1/current/driverStandings.json')
+        .get('https://ergast.com/api/f1/current/driverStandings.json')
         .then(({data}) => {
           setList(data.MRData.StandingsTable);
           setLoading(false);
@@ -107,7 +108,7 @@ const Drivers = () => {
         backgroundColor: '#000',
         height: '100%',
       }}>
-      <Text style={{color: '#fff', fontSize: 20}}>Loading....</Text>
+      <ActivityIndicator size={'small'} color="#E50914" />
     </View>
   ) : (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>

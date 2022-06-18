@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View, ScrollView, Switch} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Switch,
+  ActivityIndicator,
+} from 'react-native';
 import axios from 'axios';
 
 const Constructors = () => {
@@ -15,7 +22,7 @@ const Constructors = () => {
   async function getList() {
     try {
       await axios
-        .get('http://ergast.com/api/f1/current/constructorStandings.json')
+        .get('https://ergast.com/api/f1/current/constructorStandings.json')
         .then(({data}) => {
           setList(data.MRData.StandingsTable);
           setPlace(
@@ -154,7 +161,7 @@ const Constructors = () => {
         backgroundColor: '#000',
         height: '100%',
       }}>
-      <Text style={{color: '#fff', fontSize: 20}}>Loading....</Text>
+      <ActivityIndicator size={'small'} color="#E50914" />
     </View>
   ) : (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>

@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View, ActivityIndicator} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  StatusBar,
+} from 'react-native';
 import CalendarPiece from '../Pieces/CalendarPiece';
 import CountDown from 'react-native-countdown-component';
 import {
@@ -20,24 +26,28 @@ const Feed = () => {
   const [info, setInfo] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
-  async function getSchedule() {
-    try {
-      await axios
-        .get('http://ergast.com/api/f1/current.json')
-        .then(response => {
-          setInfo(response.data.MRData.RaceTable.Races);
-        })
-        .finally(() => setLoading(false));
-    } catch (error) {
-      alert(error);
-    }
-  }
+  // console.log('this is sstatusbarheight:', StatusBarIOS);
+
+  const getSchedule = () => {
+    axios
+      .get('https://ergast.com/api/f1/current.json')
+      .then(response => {
+        setInfo(response.data.MRData.RaceTable.Races);
+        // console.log(response);
+      })
+      .then(() => setLoading(false))
+      .catch(e => {
+        console.log(e.error);
+      });
+  };
 
   let today = new Date();
   var todayDate = today.toISOString().split('T')[0];
+  console.log('this is info', info);
 
-  if (isLoading === false) {
+  if (isLoading === false && info) {
     var filteredInfo = info.filter(e => e.date > todayDate);
+    // console.log(filteredInfo);
     const {date, time, raceName} = filteredInfo[0];
 
     var finalTime = new Date(date).getTime() - today.getTime();
@@ -227,6 +237,7 @@ const Feed = () => {
           marginHorizontal: 10,
           marginVertical: 5,
         }}
+        // circleStyle={{marginLeft: 3}}
         descriptionStyle={{color: '#fff', fontWeight: '700'}}
         detailContainerStyle={{
           backgroundColor: '#405DE6',
@@ -248,13 +259,13 @@ const Feed = () => {
         options={{
           ListHeaderComponent: <ListHeader />,
           showsVerticalScrollIndicator: false,
-          initialScrollIndex: index,
+          // initialScrollIndex: index,
         }}
       />
     );
   };
 
-  return isLoading ? (
+  return isLoading && info ? (
     <View
       style={{
         alignItems: 'center',
@@ -268,6 +279,7 @@ const Feed = () => {
     <View style={{flex: 1, backgroundColor: '#000'}}>
       <UpComing />
     </View>
+    // <View />
   );
 };
 

@@ -7,7 +7,10 @@ import {
   Image,
   TouchableOpacity,
   ImageBackground,
+  Dimensions,
 } from 'react-native';
+
+const {height, width} = Dimensions.get('screen');
 
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
@@ -16,13 +19,18 @@ const SplashScreen = ({navigation}) => {
     }, 1000);
   });
 
+  // console.log(Math.floor(width / 20));
+  const nofBars = Math.floor(width / 20);
+  const Bars = Array.from(Array(nofBars + 1).keys());
+  console.log(Bars);
+
   return (
     <View
       style={{
         height: '100%',
         width: '100%',
         backgroundColor: '#000',
-        padding: 10,
+
         flexDirection: 'row',
       }}>
       <View
@@ -31,106 +39,20 @@ const SplashScreen = ({navigation}) => {
           opacity: 0.7,
         }}>
         <StatusBar backgroundColor="#000" barStyle="light-content" />
-        <View
-          style={{
-            height: '100%',
-            width: 20,
-            backgroundColor: '#E50914',
-            margin: 10,
-          }}></View>
-        <View
-          style={{
-            height: '100%',
-            width: 20,
-            backgroundColor: '#E50914',
-            margin: 10,
-          }}></View>
-        <View
-          style={{
-            height: '100%',
-            width: 20,
-            backgroundColor: '#E50914',
-            margin: 10,
-          }}></View>
-        <View
-          style={{
-            height: '100%',
-            width: 20,
-            backgroundColor: '#E50914',
-            margin: 10,
-          }}></View>
-        <View
-          style={{
-            height: '100%',
-            width: 20,
-            backgroundColor: '#E50914',
-            margin: 10,
-          }}></View>
-        <View
-          style={{
-            height: '100%',
-            width: 20,
-            backgroundColor: '#E50914',
-            margin: 10,
-          }}></View>
-        <View
-          style={{
-            height: '100%',
-            width: 20,
-            backgroundColor: '#E50914',
-            margin: 10,
-          }}></View>
-        <View
-          style={{
-            height: '100%',
-            width: 20,
-            backgroundColor: '#E50914',
-            margin: 10,
-          }}></View>
-        <View
-          style={{
-            height: '100%',
-            width: 20,
-            backgroundColor: '#E50914',
-            margin: 10,
-          }}></View>
-        <View
-          style={{
-            height: '100%',
-            width: 20,
-            backgroundColor: '#E50914',
-            margin: 10,
-          }}></View>
-        <View
-          style={{
-            height: '100%',
-            width: 20,
-            backgroundColor: '#E50914',
-            margin: 10,
-          }}></View>
-        <View
-          style={{
-            height: '100%',
-            width: 20,
-            backgroundColor: '#E50914',
-            margin: 10,
-          }}></View>
-        <View
-          style={{
-            height: '100%',
-            width: 20,
-            backgroundColor: '#E50914',
-            margin: 10,
-          }}></View>
-        <View
-          style={{
-            height: '100%',
-            width: 20,
-            backgroundColor: '#E50914',
-            margin: 10,
-          }}></View>
+        {Bars.map((item, index) => {
+          return (
+            <View
+              key={index}
+              style={{
+                height: '100%',
+                width: 20,
+                backgroundColor: '#E50914',
+                margin: 10,
+              }}
+            />
+          );
+        })}
       </View>
-
       <View
         style={[
           StyleSheet.absoluteFillObject,

@@ -15,7 +15,7 @@ LogBox.ignoreLogs(['Reanimated 2']);
 import SplashScreen from './Components/SplashScreen';
 import Drivers from './Components/NavBarScreens/Drivers';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
@@ -66,7 +66,13 @@ const App = () => {
   };
 
   return (
-    <View style={{height: '100%', width: '100%'}}>
+    <View
+      style={{
+        height: '100%',
+        width: '100%',
+        paddingVertical: 45,
+        backgroundColor: '#000',
+      }}>
       <StatusBar backgroundColor="#000" />
       <NavigationContainer>
         <Stack.Navigator>
@@ -78,7 +84,9 @@ const App = () => {
           <Stack.Screen
             name="Home"
             component={Home}
-            options={{headerShown: false}}
+            options={{
+              headerShown: false,
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>
