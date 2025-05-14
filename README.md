@@ -37,12 +37,12 @@ Run The App
    <td>Info Page</td>
   </tr>
   <tr>
-    <td valign="top"><img src="ScreenShots/Screenshot_1626239718.png" height="200px"></td>
-    <td valign="top"><img src="ScreenShots/Screenshot_1636701465.png" height="200px"></td>
-    <td valign="top"><img src="ScreenShots/Screenshot_1637036805.png" height="200px"></td>
-    <td valign="top"><img src="ScreenShots/Screenshot_1626239603.png" height="200px"></td>
-    <td valign="top"><img src="ScreenShots/Screenshot_1626239605.png" height="200px"></td>
-   <td valign="top"><img src="ScreenShots/Screenshot_1637036814.png" height="200px"></td>
+    <td valign="top"><img src="ScreenShots/Screenshot_1626239718.png" height="400px"></td>
+    <td valign="top"><img src="ScreenShots/Screenshot_1636701465.png" height="400px"></td>
+    <td valign="top"><img src="ScreenShots/Screenshot_1637036805.png" height="400px"></td>
+    <td valign="top"><img src="ScreenShots/Screenshot_1626239603.png" height="400px"></td>
+    <td valign="top"><img src="ScreenShots/Screenshot_1626239605.png" height="400px"></td>
+   <td valign="top"><img src="ScreenShots/Screenshot_1637036814.png" height="400px"></td>
   </tr>
  </table>
  
